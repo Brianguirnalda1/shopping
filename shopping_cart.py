@@ -1,4 +1,6 @@
 
+import datetime
+
 products = [
     {"id":1, "name": "Chocolate Sandwich Cookies", "department": "snacks", "aisle": "cookies cakes", "price": 3.50},
     {"id":2, "name": "All-Seasons Salt", "department": "pantry", "aisle": "spices seasonings", "price": 4.99},
@@ -22,4 +24,46 @@ products = [
     {"id":20, "name": "Pomegranate Cranberry & Aloe Vera Enrich Drink", "department": "beverages", "aisle": "juice nectars", "price": 4.25}
 ] # Products based on data from Instacart: https://www.instacart.com/datasets/grocery-shopping-2017
 
-print(len(products))
+product_ids = []
+
+while True:
+    product_id = input("Please input a product identifier, or 'DONE' if there are no more items: ")
+    if product_id == "DONE":
+        break
+    else:
+        product_ids.append(int(product_id))
+
+def lookup_product_by_id(product_id):
+    matching_products = [product for product in products if product["id"] == product_id]
+    return matching_products[0]
+
+#
+# PRINT RECEIPT
+#
+
+running_total = 0
+
+print("-------------------------------")
+print("BRIAN's GROCERY STORE")
+print("-------------------------------")
+print("Web: www.brainsstore.com")
+print("Phone: 1.123.456.7890")
+print("Checkout Time: ", datetime.datetime.now().strftime("%Y-%m-%d %H:%m:%S"))
+
+print("-------------------------------")
+print("Shopping Cart Items:")
+for product_id in product_ids:
+    product = lookup_product_by_id(product_id)
+    running_total += product["price"]
+    price_usd = ' (${0:.2f})'.format(product["price"])
+    print(" + " + product["name"] + price_usd)
+
+print("-------------------------------")
+print("Subtotal:", '${0:.2f}'.format(running_total))
+tax = running_total * 0.08875
+print("Plus NYC Sales Tax (8.875%):", '${0:.2f}'.format(tax))
+total = running_total + tax
+print("Total:", '${0:.2f}'.format(total))
+
+print("-------------------------------")
+print("Thanks for your business! Please come again.")
